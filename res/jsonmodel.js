@@ -84,7 +84,7 @@ function generateFile(json, fileName) {
 	classImplementString='';
 
 	if (fileName.length == 0) {
-		fileName = 'CommonModel';
+		fileName = 'ModelName';
 	}
 
 	var propertyContent = generateContent(json, fileName);
@@ -195,7 +195,7 @@ function generateJavaFile(json, fileName) {
     javaSubBin='';
 
     if (fileName.length == 0) {
-        fileName = 'CommonModel';
+        fileName = 'ModelName';
     }
 
     var propertyContent = generateJavaContent(json, fileName);

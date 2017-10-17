@@ -824,7 +824,7 @@ input[id="fileName"] {
     font-family: Open Sans, sans-serif;
     font-weight: 700;
     color: #333;
-    margin: 10px 0px 10px 0;
+    margin: 10px 10px 10px 0;
     vetical-align:middle;
 }
 
@@ -849,6 +849,7 @@ button[type="reset"], button.copy {
     font-weight: 700;
     color: #fff;
     margin-top: 10px;
+    margin-left: 30px;
 }
 
 button[type="reset"]:hover {
