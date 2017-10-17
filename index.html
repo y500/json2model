@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>ModelEnd</title>
+    <script src="./res/json2.js"></script>
+    <script src="./res/jsonlint.js"></script>
+    <script src="./res/jsonmodel.js"></script>
+    <script>
+        window.onload = function () {
+            document.getElementById("convertmodel").onclick = function () {
+
+                clearContent();
+
+                try {
+                    var result = jsonlint.parse(document.getElementById("code").value);
+                    if (result) {
+                        document.getElementById("result-container").setAttribute("class", "shown");
+                        document.getElementById("result").innerHTML = "JSON is valid!";
+                        document.getElementById("result").setAttribute("class", "success");
+                        document.getElementById("code").value = JSON.stringify(result, null, "  ");
+                        convertModel();
+                    }
+                } catch(e) {
+                    document.getElementById("result-container").setAttribute("class", "shown");
+                    document.getElementById("result").innerHTML = e;
+                    document.getElementById("result").className = "error";
+                }
+            };
+            document.getElementById("jsonvalidate").onclick = function () {
+
+            };
+            document.getElementById("reset").onclick = function () {
+                clearContent();
+                document.getElementById("code").value = "";
+            };
+        }
+    </script>
+    <link href="./res/style.css" rel="stylesheet" />
+    <meta name="description" content="a free online tool to convert json or xml to an model object" />
+    <meta property="og:title" content="modelend" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://modelend.com" />
+    <meta property="og:description" content="a free online tool to convert json or xml to an model object" />
+    <meta name="robots" content="index" />
+    <meta name="keywords" content="jsonmodel, josn to model, json, model, xml, xml to model, xml2model, convert model" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="./res/icon-128.png" rel="apple-touch-icon" sizes="128x128" />
+    <link href="./res/icon-180.png" rel="apple-touch-icon" sizes="180x180" />
+</head>
+<body>
+<div class="bsa-cpc-inline"></div>
+<header>
+    <nav>
+        <div class="dev-tools-logo">
+            M
+        </div>
+        <div class="logo">
+            <h1>ModelEnd <span class="sub-title">- JSON convert to model object</span></h1>
+        </div>
+        <label for="drop" class="toggle">Menu</label>
+        <input type="checkbox" id="drop" />
+        <!-- <ul class="menu">
+         <li class="dropdown"> <label for="drop-1" class="toggle">More Developer Tools</label> <a href="https://jsonlint.com/#"><span class="three-lines"></span><span class="more-dev">More Developer</span> <span class="more-tools">Tools</span></a> <input type="checkbox" id="drop-1" />
+          <ul>
+           <li class="jscompress"><a target="_blank" href="https://jscompress.com/"><strong>JSCompress</strong><br /><span class="tagline-title">The JavaScript Compression Tool</span></a></li>
+           <li class="keygen"><a target="_blank" href="https://randomkeygen.com/"><strong>RandomKeygen</strong><br /><span class="tagline-title">The Random Password Generator</span></a></li>
+           <li class="comp"><a target="_blank" href="https://jsoncompare.com/"><strong>JSONCompare</strong><br /><span class="tagline-title"> The Advanced JSON Linter</span></a></li>
+           <li class="dns"><a target="_blank" href="https://dns-lookup.com/"><strong>DNS-Lookup</strong><br /><span class="tagline-title">The Professional DNS &amp; IP Lookup Tool</span></a></li>
+           <li class="jsvalidate"><a target="_blank" href="https://validatejavascript.com/"><strong>ValidateJavaScript</strong><br /><span class="tagline-title">Quickly Find &amp; Fix JavaScript Errors</span></a></li>
+          </ul> </li>
+        </ul>
+        <ul>
+         <li class="pro-button"><a href="https://jsoncompare.com/" target="_blank"><span class="more-dev">Try the New</span> Pro</a></li>
+        </ul>  -->
+    </nav>
+</header>
+<div class="container" id="contentdiv">
+    <textarea id="code" name="code" style="display: block;"></textarea>
+    <div class="validate">
+        <!--<button id="jsonvalidate" class="model" data-ga="validate">Validate JSON</button>-->
+        <input id="fileName">
+        <!--<span>-->
+        <!--<label><input name="language" class="select" type="radio" value="objc-c"> Object-c</label>-->
+        <!--<label><input name="language" class="select" type="radio" value="java" /> Java</label>-->
+        <!--</span>-->
+        <button id="convertmodel" class="model">Model</button>
+        <button id="reset" type="reset">Clear</button>
+        <button id="copy" class="copy">Copy</button>
+    </div>
+    <div id="precode"></div>
+    <section id="result-container">
+        <h3>Results</h3>
+        <pre id="result" class="error"></pre>
+    </section>
+    <!-- bsa-cpc -->
+    <div class="bsa-ad">
+        <div class="partner">
+            <p>JSONLint <strong>Partners</strong></p>
+            <sub>Check out their products!</sub>
+        </div>
+        <div class="bsa-cpc"></div>
+    </div>
+    <!-- /bsa-cpc -->
+    <div class="info">
+        <p class="heading">About JSONModel?</p>
+        <p>JSONModel is a tool to translate json directly to Object-c model file.</p>
+        <p class="heading">Common Errors</p>
+        <ul>
+            <li>Expecting <code>'STRING'</code> - You probably have an extra comma at the end of your collection. Something like <code>{ &quot;a&quot;: &quot;b&quot;, }</code></li>
+            <li>Expecting <code>'STRING'</code>, <code>'NUMBER'</code>, <code>'NULL'</code>, <code>'TRUE'</code>, <code>'FALSE'</code>, <code>'{'</code>, <code>'['</code> - You probably have an extra comma at the end of your list. Something like: <code>[&quot;a&quot;, &quot;b&quot;, ]</code></li>
+            <li>Enclosing your collection keys in quotes. Proper format for a collection is <code>{ &quot;key&quot;: &quot;value&quot; }</code></li>
+            <li>Make sure you follow <a href="http://www.json.org/" target="_blank">JSON's syntax</a> properly. For example, always use double quotes, always quotify your keys, and remove all callback functions.</li>
+        </ul>
+        <p class="heading">Credits</p>
+        <p>Maintained by CircleCell. Thanks to <a href="http://www.modelend.com/" target="_blank">JSONLint</a> of JSON and JS Lint, and <a href="http://zaa.ch/" target="_blank">Zach Carter</a>, who built a <a href="https://github.com/zaach/jsonlint">pure JavaScript implementation</a>.</p>
+    </div>
+    <footer>
+        &copy; 2017 ModelEnd.com —
+    </footer>
+</div>
+</body>
+</html>
