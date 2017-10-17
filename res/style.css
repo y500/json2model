@@ -543,7 +543,7 @@ header {
 
 nav {
     margin: 0 auto 0;
-    padding: 0 15px;
+    padding: 15px 15px;
     color: #353535;
     font-size: 13px;
     max-width: 1100px;
@@ -727,7 +727,7 @@ li>a:only-child:after {
     display: block;
     margin: 0 auto;
     max-width: 1100px;
-    padding: 0 15px;
+    padding: 10px 15px;
     text-align: left;
 }
 
@@ -824,7 +824,7 @@ input[id="fileName"] {
     font-family: Open Sans, sans-serif;
     font-weight: 700;
     color: #333;
-    margin: 10px 0px 10px 10px;
+    margin: 10px 0px 10px 0;
     vetical-align:middle;
 }
 
@@ -840,14 +840,14 @@ span, label {
 }
 
 button[type="reset"], button.copy {
-    background-color: #f0f0f0;
+    background-color: rgba(255, 0, 0, 0.5);
     padding: 10px 15px;
     text-decoration: none;
     border: 1px solid #ddd;
     font-size: 14px;
     font-family: Open Sans, sans-serif;
     font-weight: 700;
-    color: #333;
+    color: #fff;
     margin-top: 10px;
 }
 

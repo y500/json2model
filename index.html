@@ -26,10 +26,26 @@
                     document.getElementById("result").innerHTML = e;
                     document.getElementById("result").className = "error";
                 }
-            };
-            document.getElementById("jsonvalidate").onclick = function () {
+            },
+            document.getElementById("convertjavamodel").onclick = function () {
 
-            };
+                clearContent();
+
+                try {
+                    var result = jsonlint.parse(document.getElementById("code").value);
+                    if (result) {
+                        document.getElementById("result-container").setAttribute("class", "shown");
+                        document.getElementById("result").innerHTML = "JSON is valid!";
+                        document.getElementById("result").setAttribute("class", "success");
+                        document.getElementById("code").value = JSON.stringify(result, null, "  ");
+                        convertJavaBin();
+                    }
+                } catch(e) {
+                    document.getElementById("result-container").setAttribute("class", "shown");
+                    document.getElementById("result").innerHTML = e;
+                    document.getElementById("result").className = "error";
+                }
+            },
             document.getElementById("reset").onclick = function () {
                 clearContent();
                 document.getElementById("code").value = "";
@@ -84,7 +100,8 @@
         <!--<label><input name="language" class="select" type="radio" value="objc-c"> Object-c</label>-->
         <!--<label><input name="language" class="select" type="radio" value="java" /> Java</label>-->
         <!--</span>-->
-        <button id="convertmodel" class="model">Model</button>
+        <button id="convertmodel" class="model">Objc-c Model</button>
+        <button id="convertjavamodel" class="model">Java Bin</button>
         <button id="reset" type="reset">Clear</button>
         <button id="copy" class="copy">Copy</button>
     </div>
@@ -104,7 +121,7 @@
     <!-- /bsa-cpc -->
     <div class="info">
         <p class="heading">About JSONModel?</p>
-        <p>JSONModel is a tool to translate json directly to Object-c model file.</p>
+        <p>JSONModel is a tool to translate json directly to Object-c model file or Java Bin file.</p>
         <p class="heading">Common Errors</p>
         <ul>
             <li>Expecting <code>'STRING'</code> - You probably have an extra comma at the end of your collection. Something like <code>{ &quot;a&quot;: &quot;b&quot;, }</code></li>

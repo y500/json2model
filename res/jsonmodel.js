@@ -7,15 +7,15 @@ function implement(className) {
 }
 
 function assignProperty(propertyType, propertyName) {
-	return "@property (nonatomic , assign) "+propertyType+"              "+propertyName+";\n"
+	return "    @property (nonatomic , assign) "+propertyType+"              "+propertyName+";\n"
 }
 
 function strongProperty(propertyType, propertyName) {
-	return "@property (nonatomic , strong) "+propertyType+"              * "+propertyName+";\n"
+	return "    @property (nonatomic , strong) "+propertyType+"              * "+propertyName+";\n"
 }
 
 function copyProperty(propertyType, propertyName) {
-	return "@property (nonatomic , copy) "+propertyType+"              * "+propertyName+";\n"
+	return "    @property (nonatomic , copy) "+propertyType+"              * "+propertyName+";\n"
 }
 
 function javaClassHeader(className) {
@@ -77,7 +77,7 @@ function isMap(object) {
 var classHeaderString='';
 var classImplementString ='';
 var javaBinString='';
-var javaSubBin;
+var javaSubBin='';
 
 function generateFile(json, fileName) {
 	classHeaderString ='';
@@ -154,10 +154,11 @@ function generateContent(object, key) {
 				}else if (typeof(firstObject) === 'number' || typeof(firstObject) === 'boolean') {
 					propertyString = propertyString + strongProperty("NSArray <NSNumber *>", subPropertyName);
 				}else if (typeof(firstObject) === 'object') {
-                    propertyString = propertyString + strongProperty("NSArray <"+subClassName+" *>", subPropertyName);
+				    var subModelItemName = subClassName+"Item";
+                    propertyString = propertyString + strongProperty("NSArray <"+subModelItemName+" *>", subPropertyName);
 					subPropertyString = generateContent(subObject, subKey);
-					classHeaderString = classHeaderString + interface(subClassName, subPropertyString);
-					classImplementString = classImplementString + implement(subClassName);
+					classHeaderString = classHeaderString + interface(subModelItemName, subPropertyString);
+					classImplementString = classImplementString + implement(subModelItemName);
 				}
 
 
@@ -292,6 +293,16 @@ function generateJavaContent(object, key) {
 function convertModel() {
 	var fileName = document.getElementById("fileName").value.trim();
 	var code = document.getElementById("code");
+    var jsonStr = code.value.trim();
+    console.log(jsonStr);
+    var obj =  eval('(' + jsonStr + ')');
+    console.log(obj);
+    generateFile(obj, uppercaseFirstLetter(fileName));
+}
+
+function convertJavaBin() {
+    var fileName = document.getElementById("fileName").value.trim();
+    var code = document.getElementById("code");
     var jsonStr = code.value.trim();
     console.log(jsonStr);
     var obj =  eval('(' + jsonStr + ')');
