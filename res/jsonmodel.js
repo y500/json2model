@@ -296,8 +296,7 @@ function generateJavaContent(object, key) {
 
 function convertModel() {
 	var fileName = document.getElementById("fileName").value.trim();
-	var code = document.getElementById("code");
-    var jsonStr = code.value.trim();
+    var jsonStr = editor_json.getValue();
     console.log(jsonStr);
     var obj =  eval('(' + jsonStr + ')');
     console.log(obj);
@@ -306,8 +305,7 @@ function convertModel() {
 
 function convertJavaBin() {
     var fileName = document.getElementById("fileName").value.trim();
-    var code = document.getElementById("code");
-    var jsonStr = code.value.trim();
+    var jsonStr = editor_json.getValue();
     console.log(jsonStr);
     var obj =  eval('(' + jsonStr + ')');
     console.log(obj);
@@ -317,4 +315,25 @@ function convertJavaBin() {
 function clearContent() {
     document.getElementById("result-container").removeAttribute("class");
     document.getElementById("precode").innerHTML = "";
+}
+
+function preProcess() {
+    var orignText = editor_json.getValue().trim();
+    try {
+        var result = jsonlint.parse(orignText);
+        if (result) {
+            document.getElementById("result-container").setAttribute("class", "shown");
+            document.getElementById("result").innerHTML = "JSON is valid!";
+            document.getElementById("result").setAttribute("class", "success");
+
+            var newText = JSON.stringify(result, null, "  ");
+            editor_json.setValue(newText);
+            return true;
+        }
+    } catch(e) {
+        document.getElementById("result-container").setAttribute("class", "shown");
+        document.getElementById("result").innerHTML = e;
+        document.getElementById("result").className = "error";
+        return false;
+    }
 }

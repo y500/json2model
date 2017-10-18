@@ -6,53 +6,41 @@
     <script src="./res/json2.js"></script>
     <script src="./res/jsonlint.js"></script>
     <script src="./res/jsonmodel.js"></script>
+    <link href="./res/style.css" rel="stylesheet" />
+
+    <!--codeMirror-->
+    <link rel="stylesheet" href="./codemirror/docs.css">
+    <link rel="stylesheet" href="./codemirror/codemirror.css">
+    <link rel="stylesheet" href="./codemirror/lint.css">
+    <script src="./codemirror/codemirror.js"></script>
+    <script src="./codemirror/javascript.js"></script>
+    <script src="./codemirror/lint.js"></script>
+    <script src="./codemirror/json-lint.js"></script>
+
     <script>
         window.onload = function () {
             document.getElementById("convertmodel").onclick = function () {
 
                 clearContent();
 
-                try {
-                    var result = jsonlint.parse(document.getElementById("code").value);
-                    if (result) {
-                        document.getElementById("result-container").setAttribute("class", "shown");
-                        document.getElementById("result").innerHTML = "JSON is valid!";
-                        document.getElementById("result").setAttribute("class", "success");
-                        document.getElementById("code").value = JSON.stringify(result, null, "  ");
-                        convertModel();
-                    }
-                } catch(e) {
-                    document.getElementById("result-container").setAttribute("class", "shown");
-                    document.getElementById("result").innerHTML = e;
-                    document.getElementById("result").className = "error";
-                }
+                preProcess();
+
+                convertModel();
             },
             document.getElementById("convertjavamodel").onclick = function () {
 
                 clearContent();
 
-                try {
-                    var result = jsonlint.parse(document.getElementById("code").value);
-                    if (result) {
-                        document.getElementById("result-container").setAttribute("class", "shown");
-                        document.getElementById("result").innerHTML = "JSON is valid!";
-                        document.getElementById("result").setAttribute("class", "success");
-                        document.getElementById("code").value = JSON.stringify(result, null, "  ");
-                        convertJavaBin();
-                    }
-                } catch(e) {
-                    document.getElementById("result-container").setAttribute("class", "shown");
-                    document.getElementById("result").innerHTML = e;
-                    document.getElementById("result").className = "error";
-                }
+                preProcess();
+
+                convertJavaBin();
             },
             document.getElementById("reset").onclick = function () {
                 clearContent();
-                document.getElementById("code").value = "";
+                editor_json.setValue("");
             };
         }
     </script>
-    <link href="./res/style.css" rel="stylesheet" />
     <meta name="description" content="a free online tool to convert json or xml to an model object" />
     <meta property="og:title" content="modelend" />
     <meta property="og:type" content="website" />
@@ -92,7 +80,15 @@
     </nav>
 </header>
 <div class="container" id="contentdiv">
-    <textarea id="code" name="code" style="display: block;"></textarea>
+    <textarea id="code" name="code"></textarea>
+    <script>
+        var editor_json = CodeMirror.fromTextArea(document.getElementById("code"), {
+            lineNumbers: true,
+            mode: "application/json",
+            gutters: ["CodeMirror-lint-markers"],
+            lint: true
+        });
+    </script>
     <div class="validate">
         <!--<button id="jsonvalidate" class="model" data-ga="validate">Validate JSON</button>-->
         <input id="fileName" placeholder="ModelName">
