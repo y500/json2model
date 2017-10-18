@@ -34,7 +34,7 @@ article > h2:first-child, section:first-child > h2 { margin-top: 0; }
 }
 
 a, a:visited, a:link, .quasilink {
-  color: #A21313;
+  color: #333;
   text-decoration: none;
 }
 
