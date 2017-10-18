@@ -7,15 +7,15 @@ function implement(className) {
 }
 
 function assignProperty(propertyType, propertyName) {
-	return "    @property (nonatomic , assign) "+propertyType+"              "+propertyName+";\n"
+	return "@property (nonatomic , assign) "+propertyType+"              "+propertyName+";\n"
 }
 
 function strongProperty(propertyType, propertyName) {
-	return "    @property (nonatomic , strong) "+propertyType+"              * "+propertyName+";\n"
+	return "@property (nonatomic , strong) "+propertyType+"              * "+propertyName+";\n"
 }
 
 function copyProperty(propertyType, propertyName) {
-	return "    @property (nonatomic , copy) "+propertyType+"              * "+propertyName+";\n"
+	return "@property (nonatomic , copy) "+propertyType+"              * "+propertyName+";\n"
 }
 
 function javaClassHeader(className) {
