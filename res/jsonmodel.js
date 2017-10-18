@@ -82,6 +82,8 @@ var javaSubBin='';
 function generateFile(json, fileName) {
 	classHeaderString ='';
 	classImplementString='';
+	javaBinString='';
+	javaSubBin='';
 
 	if (fileName.length == 0) {
 		fileName = 'ModelName';
@@ -178,7 +180,7 @@ function generateContent(object, key) {
                     propertyString = propertyString + assignProperty("NSInteger", subPropertyName);
                 }
 
-            }else if (typeof(firstObject) === 'boolean') {
+            }else if (typeof(subObject) === 'boolean') {
                 propertyString = propertyString + assignProperty("BOOL", subPropertyName);
             }
 
@@ -191,6 +193,8 @@ function generateContent(object, key) {
 }
 
 function generateJavaFile(json, fileName) {
+    classHeaderString='';
+    classImplementString='';
     javaBinString='';
     javaSubBin='';
 
