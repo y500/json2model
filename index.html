@@ -19,6 +19,9 @@
     <script src="./codemirror/lint.js"></script>
     <script src="./codemirror/json-lint.js"></script>
 
+    <script src="./res/jszip.js"></script>
+    <script src="./codemirror/FileSaver.js"></script>
+
     <script>
         window.onload = function () {
             document.getElementById("convertmodel").onclick = function () {
@@ -41,6 +44,10 @@
                 clearContent();
                 editor_json.setValue("");
             };
+
+            document.getElementById("download").onclick = function () {
+                downloadFile();
+            }
         }
     </script>
     <meta name="description" content="a free online tool to convert json or xml to an model object" />
@@ -96,6 +103,7 @@
         <!--</span>-->
         <button id="convertmodel" class="model">Objc-c Model</button>
         <button id="convertjavamodel" class="model">Java Bin</button>
+        <button id="download" class="model">download file</button>
         <button id="reset" type="reset">Clear</button>
         <!--<button id="copy" class="copy">Copy</button>-->
     </div>

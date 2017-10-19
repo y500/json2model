@@ -1,9 +1,9 @@
 function interface(className, content) {
-	return "\n@interface "+className+" :NSObject\n"+content+"\n@end\n";
+	return "@interface "+className+" :NSObject\n"+content+"\n@end\n";
 }
 
 function implement(className) {
-	return "\n@implement "+className+"\n@end\n";
+	return "@implement "+className+"\n@end\n";
 }
 
 function assignProperty(propertyType, propertyName) {
@@ -19,7 +19,7 @@ function copyProperty(propertyType, propertyName) {
 }
 
 function javaClassHeader(className) {
-	return "\npublic static class "+className+"    {\r\n";
+	return "public static class "+className+"    {\r\n";
 }
 
 function javaString(propertyName) {
@@ -91,8 +91,18 @@ function generateFile(json, fileName) {
 
 	var propertyContent = generateContent(json, fileName);
 
-	classHeaderString = classHeaderString+interface(fileName, propertyContent);
-	classImplementString = classImplementString+implement(fileName);
+	if (classHeaderString.length > 0) {
+        classHeaderString = classHeaderString+"\r\n\r\n"+interface(fileName, propertyContent);
+    }else {
+        classHeaderString = interface(fileName, propertyContent);
+    }
+
+    if (classImplementString.length > 0) {
+        classImplementString = classImplementString+"\r\n\r\n"+implement(fileName);
+    }else {
+        classImplementString = implement(fileName);
+    }
+
 	javaBinString = javaClassHeader(fileName)+propertyContent;
 
 	var headerCode = document.createElement("pre");
@@ -159,8 +169,16 @@ function generateContent(object, key) {
 				    var subModelItemName = subClassName+"Item";
                     propertyString = propertyString + strongProperty("NSArray <"+subModelItemName+" *>", subPropertyName);
 					subPropertyString = generateContent(subObject, subKey);
-					classHeaderString = classHeaderString + interface(subModelItemName, subPropertyString);
-					classImplementString = classImplementString + implement(subModelItemName);
+					if (classHeaderString.length > 0) {
+                        classHeaderString = classHeaderString + "\r\n\r\n" + interface(subModelItemName, subPropertyString);
+                    }else {
+                        classHeaderString = interface(subModelItemName, subPropertyString);
+                    }
+                    if (classImplementString.length > 0) {
+                        classImplementString = classImplementString + "\r\n\r\n" + implement(subModelItemName);
+                    }else {
+                        classImplementString = implement(subModelItemName);
+                    }
 				}
 
 
@@ -168,8 +186,19 @@ function generateContent(object, key) {
 				var subPropertyString = generateContent(subObject, subKey);
 
 				propertyString = propertyString + strongProperty(subClassName, subPropertyName);
-				classHeaderString = classHeaderString + interface(subClassName, subPropertyString);
-				classImplementString = classImplementString + implement(subClassName);
+
+				if (classHeaderString.length > 0) {
+                    classHeaderString = classHeaderString + "\r\n\r\n" + interface(subClassName, subPropertyString);
+                }else {
+                    classHeaderString = interface(subClassName, subPropertyString);
+                }
+
+                if (classImplementString.length > 0) {
+                    classImplementString = classImplementString + "\r\n\r\n" + implement(subClassName);
+                }else {
+                    classImplementString = implement(subClassName);
+                }
+
 			}else if (typeof(subObject) === 'string') {
                 propertyString = propertyString + copyProperty("NSString", subPropertyName);
             }else if (typeof(subObject) === 'number') {
@@ -206,10 +235,15 @@ function generateJavaFile(json, fileName) {
 
     javaBinString = javaClassHeader(fileName)+propertyContent+javaClassTail();
 
+    var javaResult = javaBinString;
+    if (javaSubBin.length > 0) {
+        javaResult = javaSubBin + "\r\n" + javaBinString;
+    }
+
     var implementCode = document.createElement("pre");
     implementCode.setAttribute("id", "implementCode");
     implementCode.setAttribute("class", "model-result");
-    implementCode.append(javaSubBin+"\r\n"+javaBinString);
+    implementCode.append(javaResult);
 
     document.getElementById('precode').appendChild(implementCode)
 
@@ -264,14 +298,23 @@ function generateJavaContent(object, key) {
 
 					var subJavaString = javaClassHeader(subBinName) + generateJavaContent(subObject, subKey) + javaClassTail();
 
-					javaSubBin = javaSubBin + subJavaString;
+					if (javaSubBin.length > 0) {
+                        javaSubBin = javaSubBin + "\r\n" + subJavaString;
+                    }else {
+                        javaSubBin = subJavaString;
+                    }
+
                 }
 
             }else if (isMap(subObject)) {
 
                 var subJavaString = javaClassHeader(subPropertyName) + generateJavaContent(subObject, subKey) + javaClassTail();
 
-                javaSubBin = javaSubBin + subJavaString;
+                if (javaSubBin.length > 0) {
+                    javaSubBin = javaSubBin + "\r\n" + subJavaString;
+                }else {
+                    javaSubBin = subJavaString;
+                }
 
             }else if (typeof(subObject) === 'string') {
                 javaPropertyString = javaPropertyString + javaString(subPropertyName);
@@ -335,5 +378,44 @@ function preProcess() {
         document.getElementById("result").innerHTML = e;
         document.getElementById("result").className = "error";
         return false;
+    }
+}
+
+function downloadFile() {
+    var fileName = uppercaseFirstLetter(document.getElementById("fileName").value.trim());
+    if (fileName.length == 0) {
+        fileName = 'ModelName';
+    }
+    if (classHeaderString.length >0 && classImplementString.length > 0) {
+        var zip = new JSZip();
+
+        zip.file(fileName+".h", classHeaderString);
+        zip.file(fileName+".m", classImplementString);
+
+        // downloadContent = zip.generate();
+        // window.location.href="data:application/zip;base64," + downloadContent;
+
+        zip.generateAsync({type:"blob"}).then(function(downloadContent) {
+            saveAs(downloadContent, fileName+".zip");
+        });
+    }else if (javaBinString.length > 0) {
+        //directly download java file
+        data = [];
+        data.push(javaSubBin+"\r\n"+javaBinString);
+        properties = {type: 'plain/text'}; // Specify the file's mime-type.
+        try {
+            // Specify the filename using the File constructor, but ...
+            file = new File(data, fileName+".java", properties);
+        } catch (e) {
+            // ... fall back to the Blob constructor if that isn't supported.
+            file = new Blob(data, properties);
+        }
+        url = URL.createObjectURL(file);
+        location.href = url;
+    }else {
+        clearContent();
+        document.getElementById("result-container").setAttribute("class", "shown");
+        document.getElementById("result").innerHTML = "there is nothing to download!";
+        document.getElementById("result").className = "error";
     }
 }
