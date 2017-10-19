@@ -107,7 +107,7 @@ function generateFile(json, fileName) {
 
 	var headerCode = document.createElement("pre");
 	headerCode.setAttribute("id", "headCode");
-	headerCode.setAttribute("class", "model-result");
+	headerCode.setAttribute("class", "model-result prettyprint lang-m");
     headerCode.append(classHeaderString);
 
 	document.getElementById('precode').appendChild(headerCode)
@@ -115,11 +115,12 @@ function generateFile(json, fileName) {
 
     var implementCode = document.createElement("pre");
     implementCode.setAttribute("id", "implementCode");
-    implementCode.setAttribute("class", "model-result");
+    implementCode.setAttribute("class", "model-result prettyprint lang-m");
     implementCode.append(classImplementString);
 
     document.getElementById('precode').appendChild(implementCode)
 
+    prettyPrint();
 	//document.getElementById('model').value=classHeaderString+classImplementString;
 }
 
@@ -242,11 +243,12 @@ function generateJavaFile(json, fileName) {
 
     var implementCode = document.createElement("pre");
     implementCode.setAttribute("id", "implementCode");
-    implementCode.setAttribute("class", "model-result");
+    implementCode.setAttribute("class", "model-result prettyprint lang-java");
     implementCode.append(javaResult);
 
     document.getElementById('precode').appendChild(implementCode)
 
+    prettyPrint();
     //document.getElementById('model').value=classHeaderString+classImplementString;
 }
 

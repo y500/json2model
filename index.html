@@ -22,6 +22,9 @@
     <script src="./res/jszip.js"></script>
     <script src="./codemirror/FileSaver.js"></script>
 
+    <script src="./codepretty/prettify.js"></script>
+    <link type="text/css" rel="stylesheet" href="./codepretty/prettify.css">
+
     <script>
         window.onload = function () {
             document.getElementById("convertmodel").onclick = function () {
@@ -43,11 +46,13 @@
             document.getElementById("reset").onclick = function () {
                 clearContent();
                 editor_json.setValue("");
-            };
+            },
 
             document.getElementById("download").onclick = function () {
                 downloadFile();
-            }
+            };
+
+            prettyPrint();
         }
     </script>
     <meta name="description" content="a free online tool to convert json or xml to an model object" />

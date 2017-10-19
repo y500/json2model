@@ -389,13 +389,13 @@ button[type="reset"]:active {
 }
 
 #implementCode.model-result {
-    background: #E6EFC2;
+    background: #f6f8fa;
     color: #529214;
     border-color: #C6D880;
 }
 
 #headCode.model-result {
-    background: #E6EFC2;
+    background: #f6f8fa;
     color: #529214;
     border-color: #C6D880;
 }
