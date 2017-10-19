@@ -346,7 +346,7 @@ function convertModel() {
     generateFile(obj, uppercaseFirstLetter(fileName));
 }
 
-function convertJavaBin() {
+function convertJavaBean() {
     var fileName = document.getElementById("fileName").value.trim();
     var jsonStr = editor_json.getValue();
     console.log(jsonStr);

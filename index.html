@@ -38,7 +38,7 @@
 
                 preProcess();
 
-                convertJavaBin();
+                convertJavaBean();
             },
             document.getElementById("reset").onclick = function () {
                 clearContent();
@@ -102,7 +102,7 @@
         <!--<label><input name="language" class="select" type="radio" value="java" /> Java</label>-->
         <!--</span>-->
         <button id="convertmodel" class="model">Objc-c Model</button>
-        <button id="convertjavamodel" class="model">Java Bin</button>
+        <button id="convertjavamodel" class="model">Java Bean</button>
         <button id="download" class="model">download file</button>
         <button id="reset" type="reset">Clear</button>
         <!--<button id="copy" class="copy">Copy</button>-->
@@ -123,7 +123,7 @@
     <!-- /bsa-cpc -->
     <div class="info">
         <p class="heading">About JSONModel?</p>
-        <p>JSONModel is a tool to translate json directly to Object-c model file or Java Bin file.</p>
+        <p>JSONModel is a tool to translate json directly to Object-c model file or Java Bean file.</p>
         <p class="heading">Common Errors</p>
         <ul>
             <li>Expecting <code>'STRING'</code> - You probably have an extra comma at the end of your collection. Something like <code>{ &quot;a&quot;: &quot;b&quot;, }</code></li>
