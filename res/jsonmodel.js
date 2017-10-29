@@ -46,6 +46,34 @@ function javaClassTail() {
 	return "}\r\n";
 }
 
+function swiftClassHeader(className) {
+    return "class "+className+"    : NSObject {\r\n";
+}
+
+function swiftStringProperty(propertyName) {
+    return "    var "+propertyName+": String!\r\n";
+}
+
+function swiftInt(propertyName) {
+    return "    var "+propertyName+": Int = 0\r\n";
+}
+
+function swiftFloat(propertyName) {
+    return "    var "+propertyName+": CGFloat = 0.0\r\n";
+}
+
+function swiftBool(propertyName) {
+    return "    var "+propertyName+": Bool = false\r\n";
+}
+
+function swiftList(propertyName, subPropertyName) {
+    return "    var "+propertyName+": ["+propertyName+"]!\r\n";
+}
+
+function swiftClassTail() {
+    return "}\r\n";
+}
+
 function uppercaseFirstLetter(string) {
 	var newStr = string.replace(/\b[a-z]/g, function(letter) {
     				return letter.toUpperCase();
@@ -78,12 +106,20 @@ var classHeaderString='';
 var classImplementString ='';
 var javaBinString='';
 var javaSubBin='';
+var swiftString='';
+var swiftSubString='';
+
+function clearGeneratedString() {
+    classHeaderString ='';
+    classImplementString='';
+    javaBinString='';
+    javaSubBin='';
+    swiftString='';
+    swiftSubString='';
+}
 
 function generateFile(json, fileName) {
-	classHeaderString ='';
-	classImplementString='';
-	javaBinString='';
-	javaSubBin='';
+	clearGeneratedString();
 
 	if (fileName.length == 0) {
 		fileName = 'ModelName';
@@ -139,7 +175,7 @@ function generateContent(object, key) {
 							tmpobject = subObject;
 						}
 					}else if (isMap(subObject)) {
-                        if (subObject.length > tmpobject.length) {
+                        if (Object.keys(subObject).length > Object.keys(tmpobject).length) {
                             tmpobject = subObject;
                         }
                     }
@@ -223,10 +259,7 @@ function generateContent(object, key) {
 }
 
 function generateJavaFile(json, fileName) {
-    classHeaderString='';
-    classImplementString='';
-    javaBinString='';
-    javaSubBin='';
+    clearGeneratedString();
 
     if (fileName.length == 0) {
         fileName = 'ModelName';
@@ -267,7 +300,7 @@ function generateJavaContent(object, key) {
                             tmpobject = subObject;
                         }
                     }else if (isMap(subObject)) {
-                        if (subObject.length > tmpobject.length) {
+                        if (Object.keys(subObject).length > Object.keys(tmpobject).length) {
                             tmpobject = subObject;
                         }
                     }
@@ -310,7 +343,7 @@ function generateJavaContent(object, key) {
 
             }else if (isMap(subObject)) {
 
-                var subJavaString = javaClassHeader(subPropertyName) + generateJavaContent(subObject, subKey) + javaClassTail();
+                var subJavaString = javaClassHeader(uppercaseFirstLetter(subPropertyName)) + generateJavaContent(subObject, subKey) + javaClassTail();
 
                 if (javaSubBin.length > 0) {
                     javaSubBin = javaSubBin + "\r\n" + subJavaString;
@@ -339,6 +372,120 @@ function generateJavaContent(object, key) {
     return javaPropertyString;
 }
 
+function generateSwiftFile(json, fileName) {
+    clearGeneratedString();
+
+    if (fileName.length == 0) {
+        fileName = 'ModelName';
+    }
+
+    var propertyContent = generateSwiftContent(json, fileName);
+
+    swiftString = swiftClassHeader(fileName)+propertyContent+swiftClassTail();
+
+    var swiftResult = swiftString;
+    if (swiftSubString.length > 0) {
+        swiftResult = swiftSubString + "\r\n" + swiftString;
+    }
+
+    var implementCode = document.createElement("pre");
+    implementCode.setAttribute("id", "implementCode");
+    implementCode.setAttribute("class", "model-result prettyprint lang-swift");
+    implementCode.append(swiftResult);
+
+    document.getElementById('precode').appendChild(implementCode)
+
+    prettyPrint();
+    //document.getElementById('model').value=classHeaderString+classImplementString;
+}
+
+function generateSwiftContent(object, key) {
+    var swiftPropertyString = '';
+
+    if (Array.isArray(object)) {
+        if (object.length > 0) {
+            var array = object;
+            if (array.length > 0) {
+                var tmpobject = array[0];
+                for (var i = array.length - 1; i >= 0; i--) {
+                    var subObject = array[i];
+                    if (isArray(subObject)) {
+                        if (subObject.length > tmpobject.length) {
+                            tmpobject = subObject;
+                        }
+                    }else if (isMap(subObject)) {
+                        if (Object.keys(subObject).length > Object.keys(tmpobject).length) {
+                            tmpobject = subObject;
+                        }
+                    }
+                }
+                swiftPropertyString = swiftPropertyString+generateSwiftContent(tmpobject, key);
+            }
+        }
+    }else if (isMap(object)) {
+        for (var subKey in object) {
+            subObject = object[subKey];
+            var subClassName = uppercaseFirstLetter(subKey);
+            var subPropertyName = lowercaseFirstLetter(subKey);
+
+            if (isArray(subObject)) {
+
+                var firstObject;
+                var subSwiftPropertyString;
+
+                if (subObject.length > 0) {
+                    firstObject = subObject[0];
+                }
+
+                if (typeof(firstObject) === 'string') {
+                    swiftPropertyString = swiftPropertyString + swiftStringProperty(subPropertyName);
+                }else if (typeof(firstObject) === 'number' || typeof(firstObject) === 'boolean') {
+                    swiftPropertyString = swiftPropertyString + swiftInt(subPropertyName);
+                }else if (typeof(firstObject) === 'object') {
+                    var subBinName = subClassName+"Item";
+                    swiftPropertyString = swiftPropertyString + swiftList(subPropertyName, subBinName);
+
+                    var subSwiftString = swiftClassHeader(subBinName) + generateSwiftContent(subObject, subKey) + swiftClassTail();
+
+                    if (swiftSubString.length > 0) {
+                        swiftSubString = swiftSubString + "\r\n" + subSwiftString;
+                    }else {
+                        swiftSubString = subSwiftString;
+                    }
+
+                }
+
+            }else if (isMap(subObject)) {
+
+                var subSwiftString = swiftClassHeader(uppercaseFirstLetter(subPropertyName)) + generateSwiftContent(subObject, subKey) + swiftClassTail();
+
+                if (swiftSubString.length > 0) {
+                    swiftSubString = swiftSubString + "\r\n" + subSwiftString;
+                }else {
+                    swiftSubString = subSwiftString;
+                }
+
+            }else if (typeof(subObject) === 'string') {
+                swiftPropertyString = swiftPropertyString + swiftStringProperty(subPropertyName);
+            }else if (typeof(subObject) === 'number') {
+                var str = subObject.toString();
+                if (str.indexOf('.') >= 0) {
+                    swiftPropertyString = swiftPropertyString + swiftFloat(subPropertyName);
+                }else {
+                    swiftPropertyString = swiftPropertyString + swiftInt(subPropertyName);
+                }
+            }else if (typeof(subObject) === 'boolean') {
+                swiftPropertyString = swiftPropertyString + swiftBool(subPropertyName);
+            }
+
+        }
+    }else {
+        alert("key = "+key)
+    }
+
+    return swiftPropertyString;
+}
+
 function convertModel() {
 	var fileName = document.getElementById("fileName").value.trim();
     var jsonStr = editor_json.getValue();
@@ -355,6 +502,15 @@ function convertJavaBean() {
     var obj =  eval('(' + jsonStr + ')');
     console.log(obj);
     generateJavaFile(obj, uppercaseFirstLetter(fileName));
+}
+
+function convertSwiftModel() {
+    var fileName = document.getElementById("fileName").value.trim();
+    var jsonStr = editor_json.getValue();
+    console.log(jsonStr);
+    var obj =  eval('(' + jsonStr + ')');
+    console.log(obj);
+    generateSwiftFile(obj, uppercaseFirstLetter(fileName));
 }
 
 function clearContent() {
@@ -403,11 +559,24 @@ function downloadFile() {
     }else if (javaBinString.length > 0) {
         //directly download java file
         data = [];
-        data.push(javaSubBin+"\r\n"+javaBinString);
+        data.push(javaSubBin + "\r\n" + javaBinString);
         properties = {type: 'plain/text'}; // Specify the file's mime-type.
         try {
             // Specify the filename using the File constructor, but ...
-            file = new File(data, fileName+".java", properties);
+            file = new File(data, fileName + ".java", properties);
+        } catch (e) {
+            // ... fall back to the Blob constructor if that isn't supported.
+            file = new Blob(data, properties);
+        }
+        url = URL.createObjectURL(file);
+        location.href = url;
+    }else if (swiftString.length > 0) {
+        data = [];
+        data.push(swiftSubString + "\r\n" + swiftString);
+        properties = {type: 'plain/text'}; // Specify the file's mime-type.
+        try {
+            // Specify the filename using the File constructor, but ...
+            file = new File(data, fileName + ".swift", properties);
         } catch (e) {
             // ... fall back to the Blob constructor if that isn't supported.
             file = new Blob(data, properties);

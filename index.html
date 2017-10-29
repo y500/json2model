@@ -39,6 +39,11 @@
 
                 convertModel();
             },
+            document.getElementById("swiftmodel").onclick = function () {
+                clearContent();
+                preProcess();
+                convertSwiftModel();
+            },
             document.getElementById("convertjavamodel").onclick = function () {
 
                 clearContent();
@@ -111,6 +116,7 @@
         <!--<label><input name="language" class="select" type="radio" value="java" /> Java</label>-->
         <!--</span>-->
         <button id="convertmodel" class="model">Objc-c Model</button>
+        <button id="swiftmodel" class="model">Swift Model</button>
         <button id="convertjavamodel" class="model">Java Bean</button>
         <button id="download" class="model">download file</button>
         <button id="reset" type="reset">Clear</button>
@@ -145,6 +151,7 @@
     </div>
     <footer>
         &copy; 2017 ModelEnd.com —
+        <script src="https://s13.cnzz.com/z_stat.php?id=1265361730&web_id=1265361730" language="JavaScript"></script>
     </footer>
 </div>
 <script src="./res/jszip.js"></script>
