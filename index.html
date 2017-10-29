@@ -32,33 +32,21 @@
     <script>
         window.onload = function () {
             document.getElementById("convertmodel").onclick = function () {
-
-                clearContent();
-
-                preProcess();
-
-                convertModel();
+                jsonmodel.objectcModel();
             },
             document.getElementById("swiftmodel").onclick = function () {
-                clearContent();
-                preProcess();
-                convertSwiftModel();
+                jsonmodel.swiftModel();
             },
             document.getElementById("convertjavamodel").onclick = function () {
-
-                clearContent();
-
-                preProcess();
-
-                convertJavaBean();
+                jsonmodel.javaBean();
             },
             document.getElementById("reset").onclick = function () {
-                clearContent();
+                jsonmodel.clearContent();
                 editor_json.setValue("");
             },
 
             document.getElementById("download").onclick = function () {
-                downloadFile();
+                jsonmodel.downloadFile();
             };
 
             prettyPrint();
