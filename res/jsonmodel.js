@@ -61,10 +61,10 @@ var jsonModel = (function () {
         }
     };
 
-    var interface = function(className, content) {
+    var objcInterface = function(className, content) {
         return "@interface "+className+" :NSObject\n"+content+"\n@end\n";
     };
-    var implement = function(className) {
+    var objcImplement = function(className) {
         return "@implement "+className+"\n@end\n";
     };
 
@@ -146,15 +146,15 @@ var jsonModel = (function () {
         var propertyContent = generateContent(json, fileName);
 
         if (classHeaderString.length > 0) {
-            classHeaderString = classHeaderString+"\r\n\r\n"+interface(fileName, propertyContent);
+            classHeaderString = classHeaderString+"\r\n\r\n"+objcInterface(fileName, propertyContent);
         }else {
-            classHeaderString = interface(fileName, propertyContent);
+            classHeaderString = objcInterface(fileName, propertyContent);
         }
 
         if (classImplementString.length > 0) {
-            classImplementString = classImplementString+"\r\n\r\n"+implement(fileName);
+            classImplementString = classImplementString+"\r\n\r\n"+objcImplement(fileName);
         }else {
-            classImplementString = implement(fileName);
+            classImplementString = objcImplement(fileName);
         }
 
         var headerCode = document.createElement("pre");
@@ -222,14 +222,14 @@ var jsonModel = (function () {
                         propertyString = propertyString + strongProperty("NSArray <"+subModelItemName+" *>", subPropertyName);
                         subPropertyString = generateContent(subObject, subKey);
                         if (classHeaderString.length > 0) {
-                            classHeaderString = classHeaderString + "\r\n\r\n" + interface(subModelItemName, subPropertyString);
+                            classHeaderString = classHeaderString + "\r\n\r\n" + objcInterface(subModelItemName, subPropertyString);
                         }else {
-                            classHeaderString = interface(subModelItemName, subPropertyString);
+                            classHeaderString = objcInterface(subModelItemName, subPropertyString);
                         }
                         if (classImplementString.length > 0) {
-                            classImplementString = classImplementString + "\r\n\r\n" + implement(subModelItemName);
+                            classImplementString = classImplementString + "\r\n\r\n" + objcImplement(subModelItemName);
                         }else {
-                            classImplementString = implement(subModelItemName);
+                            classImplementString = objcImplement(subModelItemName);
                         }
                     }
 
@@ -240,15 +240,15 @@ var jsonModel = (function () {
                     propertyString = propertyString + strongProperty(subClassName, subPropertyName);
 
                     if (classHeaderString.length > 0) {
-                        classHeaderString = classHeaderString + "\r\n\r\n" + interface(subClassName, subPropertyString);
+                        classHeaderString = classHeaderString + "\r\n\r\n" + objcInterface(subClassName, subPropertyString);
                     }else {
-                        classHeaderString = interface(subClassName, subPropertyString);
+                        classHeaderString = objcInterface(subClassName, subPropertyString);
                     }
 
                     if (classImplementString.length > 0) {
-                        classImplementString = classImplementString + "\r\n\r\n" + implement(subClassName);
+                        classImplementString = classImplementString + "\r\n\r\n" + objcImplement(subClassName);
                     }else {
-                        classImplementString = implement(subClassName);
+                        classImplementString = objcImplement(subClassName);
                     }
 
                 }else if (typeof(subObject) === 'string') {
