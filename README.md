@@ -6,8 +6,8 @@ With this you will never need to write model files line by line, and just paste 
 
 ###Object-c
 
-![](http://noti.qiniudn.com/57608ae847244e78fb6f8185c6e6f50a.png)
+![](http://notiimg.y500.me/57608ae847244e78fb6f8185c6e6f50a.png)
 
 
 ###JAVA
-![](http://noti.qiniudn.com/3da808647ba4a137266b88a54178f390.png)
+![](http://notiimg.y500.me/3da808647ba4a137266b88a54178f390.png)
